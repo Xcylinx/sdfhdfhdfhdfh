@@ -6,6 +6,7 @@ local Camera = workspace.CurrentCamera
 local player = Players.LocalPlayer
 
 local FOV = 50
+local MaxDistance = 200
 local AimKey = Enum.KeyCode.E
 local StopKey = Enum.KeyCode.Q
 local TeamCheck = false
@@ -49,6 +50,11 @@ local function isWithinFOV(position)
     return (screenPos - inputPosition).Magnitude <= FOV
 end
 
+local function isWithinDistance(object)
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    return root and (object.Position - root.Position).Magnitude <= MaxDistance
+end
+
 local function isVisible(part)
     local origin = Camera.CFrame.Position
     local direction = (part.Position - origin).Unit
@@ -68,7 +74,7 @@ local function findTarget()
             end
 
             local head = otherPlayer.Character.Head
-            if isWithinFOV(head.Position) and (not WallCheck or isVisible(head)) then
+            if isWithinFOV(head.Position) and isWithinDistance(head) and (not WallCheck or isVisible(head)) then
                 local screenPos = worldToScreen(head.Position)
                 local distance = (inputPosition - screenPos).Magnitude
                 if distance < closestDistance then
