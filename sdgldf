@@ -306,11 +306,30 @@ Functions = {}; do
         return true
     end
 
-
     function Functions.AddConnection(name, connection)
         Functions.DisableConnection(name)
 
         Connections[name] = connection
+    end
+
+    function Functions.IsKicked()
+        local Success, Response = pcall(function()
+            return Services.CoreGui.RobloxPromptGui.promptOverlay.ErrorPrompt.Visible
+        end)
+
+        return Success and Response or false
+    end
+
+    function Functions.OnKicked(Func)
+        repeat wait() until Functions.IsKicked() or Variables.Unloaded
+
+        if Variables.Unloaded or not Config.RejoinOnKick then
+            return
+        end
+
+        return pcall(function()
+            Func()
+        end)
     end
 end
 
@@ -516,30 +535,6 @@ WebSocketFunctions = {}; do
                 
                 task.wait(30)
             end
-        end)
-    end
-end
-
---<< MAIN FUNCTIONS >>--
-
-Functions = {}; do
-    function Functions.IsKicked()
-        local Success, Response = pcall(function()
-            return Services.CoreGui.RobloxPromptGui.promptOverlay.ErrorPrompt.Visible
-        end)
-
-        return Success and Response or false
-    end
-
-    function Functions.OnKicked(Func)
-        repeat wait() until Functions.IsKicked() or Variables.Unloaded
-
-        if Variables.Unloaded or not Config.RejoinOnKick then
-            return
-        end
-
-        return pcall(function()
-            Func()
         end)
     end
 end
