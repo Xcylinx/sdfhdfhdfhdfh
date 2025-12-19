@@ -172,7 +172,7 @@ connection4 = RunService.RenderStepped:Connect(function()
     end
 end)
 
-if UserInputService.TouchEnabled then
+--if UserInputService.TouchEnabled then
     do -- Toggle button
         local frame = Instance.new("Frame", screenGui)
         frame.BorderSizePixel = 0
@@ -274,4 +274,4 @@ if UserInputService.TouchEnabled then
             stopScript()
         end)
     end
-end
+--end
